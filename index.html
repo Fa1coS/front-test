@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no"
+    />
+    <title>Choices</title>
+
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Ignore these -->
+    <link rel="stylesheet" href="assets/styles/base.min.css" />
+    <!-- End ignore these -->
+
+    <!-- Optional includes -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es5%2Ces6%2CArray.prototype.includes%2Cfetch%2CCustomEvent%2CElement.prototype.closest"></script>
+    <!-- End optional includes -->
+
+    <!-- Choices includes -->
+    <link rel="stylesheet" href="assets/styles/choices.css" />
+    <script src="assets/scripts/choices.min.js"></script>
+    <!-- End Choices includes -->
+
+    <!--[if lt IE 9]>
+      <style>
+        .hidden-ie {
+          display: none;
+        }
+        .visible-ie {
+          display: block;
+        }
+      </style>
+    <![endif]-->
+  </head>
+
+  <body onload="main()">
+    <div class="container">
+      <div class="section">
+
+
+
+
+        <label for="choices-multiple-remove-button">With remove button</label>
+          <div class="acc_category">Account category</div>
+        <select
+          class="form-control"
+          name="choices-multiple-remove-button"
+          id="choices-multiple-remove-button"
+          placeholder="This is a placeholder"
+          multiple
+
+        >
+            <option placeholder class="opt_placeholder">Type to search or choose from menu</option>
+<!--          <optgroup label="Swedish Cars">-->
+<!--            <option value="volvo">Volvo</option>-->
+<!--            <option value="saab">Saab</option>-->
+<!--          </optgroup>-->
+<!--          <optgroup label="German Cars">-->
+<!--            <option value="mercedes">-->
+<!--              <option value="mercedes1">Mercedes1</option>-->
+<!--               <option value="audi1">Audi1</option>-->
+<!--            </option>-->
+<!--            <option value="audi">Audi</option>-->
+<!--          </optgroup>-->
+
+        </select>
+      </div>
+    </div>
+    <script>
+       function main() {
+         /* var multipleCancelButton = new Choices(
+              '#choices-multiple-remove-button',
+              {
+                  items: ['first','second'],
+                  removeItemButton: true,
+              }
+          );*/
+
+         var level=1;
+          var b = [{
+              name:'First',
+              subitems:[{
+                  name: 'first-submenu-1',
+                  subsubitems:['first-sub-sub-menu-1.1','first-sub-sub-menu-1.2','first-sub-sub-menu-1.3'],
+              },
+                  {
+                  name: 'first-submenu-2',
+                  subsubitems:['first-sub-sub-menu-2.1','first-sub-sub-menu-2.2','first-sub-sub-menu-2.3'],
+              }
+              ]},
+              {name:'Second',
+              subitems:[{
+                  name: 'second-submenu-1',
+                  subsubitems:['second-sub-sub-menu-1.1','second-sub-sub-menu-1.2','second-sub-sub-menu-1.3'],
+              },
+                  {
+                      name: 'second-submenu-2',
+                      subsubitems:['second-sub-sub-menu-2.1','second-sub-sub-menu-2.2','second-sub-sub-menu-2.3'],
+                  }
+              ],
+          }];
+          //console.log(b);
+
+          function chosees(i,choose) {
+              var result=[{
+                  label: '',
+                  id: 1,
+                  disabled: false,
+                  choices: [
+                  ],
+                  replaceChoices:true
+              }];
+              if(choose){
+                   result=[{
+                      label: '',
+                      id: 1,
+                      disabled: false,
+                      choices: [
+                      ],
+                       replaceChoices:true
+                  }];
+              }
+
+              var active_choise = secondElement.getValue();
+              active_choise.forEach(function(item, index, array) {
+                  result[0].choices.push({
+                      value: item.value,
+                      label: item.value,
+                      selected: false,
+                      disabled: false,
+                      customProperties: {
+                          for_del: 'I am a custom property for delete select items'
+                      }
+                  })
+              });
+
+              if(i===1)
+              {
+                  b.forEach(function(item, index, array) {
+                      result[0].choices.push({
+                          value: item.name,
+                          label: item.name,
+                          selected: false,
+                          disabled: false,
+                      })
+                  });
+              }
+
+              if(i === 2){
+                  b.forEach(function(item, index, array) {
+                      if(item.name == choose){
+                          item.subitems.forEach(function(item, index, array) {
+                              result[0].choices.push({
+                              value: item.name,
+                              label: item.name,
+                              selected: false,
+                              disabled: false,
+                          })
+                      });
+                      }
+                  });
+              }
+
+                if(i === 3){
+                    b.forEach(function(item, index, array) {
+                        item.subitems.forEach(function(item1, index1, array) {
+                            item1.subsubitems.forEach(function(item2, index2, array) {
+                                if(item1.name == choose){
+                                    result[0].choices.push({
+                                        value: item2,
+                                        label: item2,
+                                        selected: false,
+                                        disabled: false,
+                                    })
+                                }
+                            });
+                        });
+                    });
+                }
+             console.log(result)
+              return result;
+          }
+
+           function search( value) {
+              var indexs=[];
+               b.forEach(function(item, index, array) {
+                   if(item.name == value)
+                   {
+                       indexs.push(index)
+                   }else{
+                       item.subitems.forEach(function(item1, index1, array) {
+                           if(item1.name == value)
+                           {
+                               indexs.push(index);
+                               indexs.push(index1);
+                           }else{
+                               item1.subsubitems.forEach(function(item2, index2, array) {
+                                   if(item2 == value)
+                                   {
+                                       indexs.push(index);
+                                       indexs.push(index1);
+                                       indexs.push(index2);
+                                   }else{
+                                       return 0;
+                                   }
+                               });
+                           }
+                       });
+                   }
+               });
+              // secondElement.setValue(['test']);
+              return indexs;
+
+           }
+
+         var secondElement = new Choices('#choices-multiple-remove-button', {  allowSearch: false,removeItemButton: true,maxItemCount:3,searchFloor:0,placeholder:true,placeholderValue:'Type to search or choose from menu'});
+          secondElement.setChoices(chosees(level));
+          secondElement.passedElement.element.addEventListener(
+              'addItem',
+              function(event) {
+                  console.log(event.detail);
+                    if(event.detail.customProperties){
+                        secondElement.removeActiveItemsByValue(event.detail.value);
+                    }else{
+                        level = search(event.detail.value).length;
+                        level ++;
+                        var active_chooise = secondElement.getValue().length;
+                        if(level >= 4 && active_chooise < 2 ){
+                            secondElement.clearChoices();
+                        }
+
+                        if(level<=3 && level>1){
+                            secondElement.setChoices(chosees(level,event.detail.value),'value','label',true);
+                        }
+                    }
+
+
+              },
+              false,
+          );
+
+
+
+
+          secondElement.passedElement.element.addEventListener(
+              'removeItem',
+              function(event) {
+                  var active_chooise = secondElement.getValue().slice(-1)[0];
+                  var active_chooise_full = secondElement.getValue();
+
+
+                  active_chooise_full.forEach(function(item, index, array) {
+                      if(item.id>event.detail.id){
+                          secondElement.removeActiveItemsByValue(item.value);
+                          active_chooise=secondElement.getValue().slice(-1)[0];
+                          //console.log('need delete' +item.value )
+                      }
+                  });
+
+
+                  if(active_chooise){
+                      level = search(active_chooise.value).length;
+                      secondElement.setChoices(chosees(++level,active_chooise.value),'value','label',true);
+                  }else{
+                      secondElement.setChoices(chosees(1),'value','label',true);
+                  }
+              },
+              false,
+          );
+
+           secondElement.passedElement.element.addEventListener(
+               'hideDropdown',
+               function(event) {
+                   var active_chooise = secondElement.getValue();
+
+                   if(active_chooise==0){
+                       secondElement.setChoices(chosees(1),'value','label',true);
+                   }
+                   console.log(event.detail);
+
+               },
+               false,
+           );
+
+
+
+           secondElement.passedElement.element.addEventListener(
+               'search',
+               function(event) {
+                   var result=[];
+
+
+//                   console.log(document.getElementsByClassName("choices__input--cloned"));
+                   secondElement.removeActiveItems();
+
+                       b.forEach(function(item, index, array) {
+                           if(item.name.indexOf(event.detail.value)!=-1)
+                           {
+                               result.push({
+                                   value: item.name,
+                                   label: item.name,
+                                   selected: false,
+                                   disabled: false,
+                               })
+                           }
+                           item.subitems.forEach(function(item1, index, array) {
+                               if(item1.name.indexOf(event.detail.value)!=-1 )
+                               {
+                                   result.push({
+                                       value: item1.name,
+                                       label: item1.name,
+                                       selected: false,
+                                       disabled: false,
+                                   })
+                               }
+                               item1.subsubitems.forEach(function(item2, index, array) {
+                                   if(item2.indexOf(event.detail.value)!=-1)
+                                   {
+                                       result.push({
+                                           value: item2,
+                                           label: item2,
+                                           selected: false,
+                                           disabled: false,
+                                       })
+                                   }else{
+                                       console.log('not found');
+                                   }
+                               });
+                           });
+                       });
+                       secondElement.setChoices(result,'value','label',true);
+
+               },
+               false,
+           );
+
+
+      };
+    </script>
+  </body>
+</html>
